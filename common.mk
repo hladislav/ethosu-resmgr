@@ -30,9 +30,6 @@ ifndef USEFILE
 USEFILE=$(PROJECT_ROOT)/ethosu.use
 endif
 
-
-BSP_PATH ?= /home/ladislav/Documents/git/qnx8-bsp
-
 # RPMSG-lite lib
 
 ifdef SHARED_LIB
