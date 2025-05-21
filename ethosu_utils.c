@@ -45,7 +45,7 @@ int start_mcore() {
     return 0;
 }
 
-int reset_mcore() {
+int restart_mcore() {
     if (stop_mcore() != 0) {
         return -1;
     }

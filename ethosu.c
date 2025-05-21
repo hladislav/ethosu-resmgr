@@ -50,7 +50,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, iofunc_ocb_t *ocb) {
     }
 
     union {
-        ethosu_api_device_capabilities_t capabilities;
+        ethosu_resmgr_device_capabilities_t capabilities;
         ethosu_resmgr_inference_msg_t inference;
     } *rx_data;
 
@@ -73,7 +73,7 @@ int io_devctl(resmgr_context_t *ctp, io_devctl_t *msg, iofunc_ocb_t *ocb) {
             DEV_DBG("Sending capabilities request...\n");
             ret = ethosu_capabilities_request(&drvr_data, &rx_data->capabilities);
             if (ret == 0) {
-                nbytes = sizeof(ethosu_api_device_capabilities_t);
+                nbytes = sizeof(ethosu_resmgr_device_capabilities_t);
             }
             break;
 
@@ -117,7 +117,7 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    if (reset_mcore() != 0) {
+    if (restart_mcore() != 0) {
         return EXIT_FAILURE;
     }
 

@@ -126,7 +126,7 @@ typedef struct ethosu_resmgr_device_hw_cfg
     uint32_t custom_dma;
 } ethosu_resmgr_device_hw_cfg_t;
 
-typedef struct ethosu_api_device_capabilities
+typedef struct ethosu_resmgr_device_capabilities
 {
     ethosu_resmgr_device_hw_id_t hw_id;
     ethosu_resmgr_device_hw_cfg_t hw_cfg;
@@ -134,9 +134,9 @@ typedef struct ethosu_api_device_capabilities
     uint32_t driver_patch_rev;
     uint32_t driver_minor_rev;
     uint32_t driver_major_rev;
-} ethosu_api_device_capabilities_t;
+} ethosu_resmgr_device_capabilities_t;
 
-enum ethosu_api_inference_type
+enum ethosu_resmgr_inference_type
 {
     ETHOSU_API_INFERENCE_MODEL = 0,
     ETHOSU_API_INFERENCE_OP

@@ -33,12 +33,12 @@
  */
 
 typedef struct ethosu_rpmsg {
-    void                    *handle; // RPMSG-lite handle
-    void                    *ept; // RPMSG-lite endpoint
-    volatile unsigned long   dest_addr;
-    void*                    namespace;
+    void                    *handle;        // RPMSG-lite handle
+    void                    *ept;           // RPMSG-lite endpoint
+    void*                    namespace;     // RPMSG-Lite namespace
+    volatile unsigned long   dest_addr;     // Used for communication over RPMSG-Lite
 
-    void*                    incoming_data;
+    void*                    incoming_data; // Used to temporary store data from Cortex-M
 
     // can be used in the future to distinguish messages from multiple threads
     int                      global_id;
@@ -48,20 +48,60 @@ typedef struct ethosu_rpmsg {
  * Functions
  */
 
-int ethosu_rpmsg_ping(ethosu_rpmsg_t *erp);
+/**
+ * Sends PING to the Cortex-M via RPMSG-Lite
+ *
+ * @param rpmsg_data initialized RPMSG-Lite handle and endpoint
+ *
+ * @return 0 - success, non-zero - failed to send
+*/
+int ethosu_rpmsg_ping(ethosu_rpmsg_t *rpmsg_data);
 
-int ethosu_rpmsg_pong(ethosu_rpmsg_t *erp);
+/**
+ * Sends PONG to the Cortex-M via RPMSG-Lite
+ *
+ * @param rpmsg_data initialized RPMSG-Lite handle and endpoint
+ *
+ * @return 0 - success, non-zero - failed to send
+*/
+int ethosu_rpmsg_pong(ethosu_rpmsg_t *rpmsg_data);
 
-int ethosu_rpmsg_version_request(ethosu_rpmsg_t *erp);
+/**
+ * Sends version request to the Cortex-M via RPMSG-Lite
+ *
+ * @param rpmsg_data initialized RPMSG-Lite handle and endpoint
+ *
+ * @return 0 - success, non-zero - failed to send
+*/
+int ethosu_rpmsg_version_request(ethosu_rpmsg_t *rpmsg_data);
 
-int ethosu_rpmsg_capabilities_request(ethosu_rpmsg_t *erp, int id);
+/**
+ * Sends capabilities request to the Cortex-M via RPMSG-Lite
+ *
+ * @param rpmsg_data initialized RPMSG-Lite handle and endpoint
+ *
+ * @return 0 - success, non-zero - failed to send
+*/
+int ethosu_rpmsg_capabilities_request(ethosu_rpmsg_t *rpmsg_data);
 
-int ethosu_rpmsg_inference(ethosu_rpmsg_t *erp,
-                            ethosu_resmgr_inference_request_t *req);
+/**
+ * Sends inference request to the Cortex-M via RPMSG-Lite
+ *
+ * @param rpmsg_data initialized RPMSG-Lite handle and endpoint
+ * @param request_data inference data for Cortex-M
+ *
+ * @return 0 - success, non-zero - failed to send
+*/
+int ethosu_rpmsg_inference(ethosu_rpmsg_t *rpmsg_data,
+                            ethosu_resmgr_inference_request_t *request_data);
 
-int ethosu_rpmsg_cancel_inference(ethosu_rpmsg_t *erp,
-                                int inference_handle);
-
-int ethosu_rpmsg_init(ethosu_rpmsg_t *erp);
+/**
+ * Initializes the communication via RPMSG-Lite
+ *
+ * @param rpmsg_data uninitialized RPMSG-Lite structure
+ *
+ * @return 0 - success, non-zero - failure
+*/
+int ethosu_rpmsg_init(ethosu_rpmsg_t *rpmsg_data);
 
 #endif /* ETHOSU_RPMSG_H */

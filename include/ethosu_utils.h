@@ -21,10 +21,25 @@
  * Functions
  */
 
+/**
+ * Starts the Cortex-M core
+ *
+ * @return 0 - success, non-zero - failure
+*/
 int start_mcore();
 
+/**
+ * Stops the Cortex-M core
+ *
+ * @return 0 - success, non-zero - failure
+*/
 int stop_mcore();
 
-int reset_mcore();
+/**
+ * Restarts the Cortex-M core (with sleep between)
+ *
+ * @return 0 - success, non-zero - failure
+*/
+int restart_mcore();
 
 #endif /* ETHOSU_UTILS_H */
