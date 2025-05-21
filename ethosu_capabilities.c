@@ -17,10 +17,10 @@
 #include "public/ethosu_resmgr_api.h"
 
 int ethosu_capabilities_request(driver_data_t *drvr_data,
-    ethosu_api_device_capabilities_t *cap) {
+    ethosu_resmgr_device_capabilities_t *capabilities) {
 
     DEV_DBG("Sending capabilities request to core\n");
-    int ret = ethosu_rpmsg_capabilities_request(&drvr_data->ethosu_rpmsg, drvr_data->ethosu_rpmsg.global_id);
+    int ret = ethosu_rpmsg_capabilities_request(&drvr_data->ethosu_rpmsg);
     if (ret != 0) {
         return ret;
     }

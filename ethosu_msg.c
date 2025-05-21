@@ -13,7 +13,7 @@
 #include "ethosu_inference.h"
 #include "ethosu_msg.h"
 
-int ethosu_msg_handler(ethosu_rpmsg_t *erp, void *data)
+int ethosu_msg_handler(ethosu_rpmsg_t *rpmsg_data, void *data)
 {
     ethosu_fw_msg_header_t* header = (ethosu_fw_msg_header_t*)data;
     void *msg_data = (char *)data + sizeof(ethosu_fw_msg_header_t);
@@ -26,17 +26,14 @@ int ethosu_msg_handler(ethosu_rpmsg_t *erp, void *data)
                 return EBADMSG;
             }
 
-            // TODO should find some clang tidy format and stick to it
-            ethosu_fw_error_msg_t* error =
-                (ethosu_fw_error_msg_t*)
-                ((char *)data + sizeof(ethosu_fw_msg_header_t));
+            ethosu_fw_error_msg_t* error = (ethosu_fw_error_msg_t*)msg_data;
             
             error->msg[sizeof(error->msg) - 1] = '\0';
             DEV_ERR("Error message: %s\n", error->msg);
             return EBADMSG;
         case ETHOSU_MSG_PING:
             DEV_DBG("Received ping from core\n");
-            return ethosu_rpmsg_pong(erp);
+            return ethosu_rpmsg_pong(rpmsg_data);
         case ETHOSU_MSG_PONG:
             DEV_DBG("Received PONG\n");
             return EOK;
@@ -52,7 +49,7 @@ int ethosu_msg_handler(ethosu_rpmsg_t *erp, void *data)
                 inference_rsp->output_count, inference_rsp->status
             );
 
-            erp->incoming_data = inference_rsp;
+            rpmsg_data->incoming_data = inference_rsp;
 
             return EOK;
         case ETHOSU_MSG_VERSION_RSP:
@@ -66,7 +63,7 @@ int ethosu_msg_handler(ethosu_rpmsg_t *erp, void *data)
 
             DEV_DBG("Received version message: %d.%d\n", version->major, version->minor);
 
-            erp->incoming_data = version;
+            rpmsg_data->incoming_data = version;
 
             return EOK;
         case ETHOSU_MSG_CAPABILITY_RSP:
@@ -95,7 +92,7 @@ int ethosu_msg_handler(ethosu_rpmsg_t *erp, void *data)
                     capabilities->supports_dma
             );
 
-            erp->incoming_data = capabilities;
+            rpmsg_data->incoming_data = capabilities;
             return 0;
         case ETHOSU_MSG_NETWORK_INFO_RSP:
         case ETHOSU_MSG_POWER_RSP:
